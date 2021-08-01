@@ -38,7 +38,7 @@ def clean_home_phone(home_phone)
   clean_one[0] == '1' && clean_one.length == 11 ? clean_one[1..10] : clean_one
 end
 
-def peak_hours_max_index(data)
+def peak_time_index(data)
   max_value = data[0]
   max_value_index = 0
   data.each_with_index do |_value, key|
@@ -49,8 +49,8 @@ def peak_hours_max_index(data)
   max_value_index
 end
 
-def peak_hours(data)
-  max_val_index = peak_hours_max_index(data)
+def peak_timing(data)
+  max_val_index = peak_time_index(data)
   hours = []
   data.each_with_index do |value, key|
     hours.push(key) if value == data[max_val_index]
@@ -84,17 +84,13 @@ contents.each do |row|
   w_days[wday] += 1
   puts "#{id}.- #{name}, #{zipcode}, #{home_phone}, #{regdate_time} (hora:#{hour})"
 
-  # legislators = legislators_by_zipcode(zipcode)
+  legislators = legislators_by_zipcode(zipcode)
+  form_letter = erb_template.result(binding)
+  save_thank_you_letter(id, form_letter)
 
-  # form_letter = erb_template.result(binding)
-
-  # save_thank_you_letter(id, form_letter)
 end
 
-# res = hours.reduce(Hash.new(0)) do |result, count|
-#   result[count] += 1
-#   result
-# end
 puts w_days.to_s
 puts hours.to_s
-puts "Concurrency happens at...#{peak_hours(hours)}"
+puts "Concurrency happens at...#{peak_timing(hours)}"
+puts "Concurrency on the weeks happens at.. #{peak_timing(w_days)}"
